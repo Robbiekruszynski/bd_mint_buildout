@@ -20,5 +20,35 @@ contract BlockdaemonGuild is ERC721, Ownable {
         maxSupply = 1000;
         maxPerWallet = 1;
         //consider the maxPerWallet
+        //consider if there should be a way to destory the token based on X condition(s)
+    }
+
+    function setIsPublicMintEnabled(bool isPublicMintEnabled_)
+        external
+        onlyOwner
+    {
+        //onlyOwner is coming from the Ownable contract on line 7
+        isPublicMintEnabled = isPublicMintEnabled_;
+    }
+
+    function setBaseTokenUri(string calldata baseTokenUri_) external onlyOwner {
+        baseTokenUri = baseTokenUri_;
+    }
+
+    function tokenURI(uint256 tokenId_)
+        public
+        view
+        override
+        returns (string memory)
+    {
+        require(_exists(tokenId_), "ERC721 isn't real, womp womp");
+        return
+            string(
+                abi.encodePacked(
+                    baseTokenUri,
+                    Strings.toString(tokenId_),
+                    ".json"
+                )
+            );
     }
 }
